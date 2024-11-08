@@ -10,8 +10,8 @@ class RobotMovement:
         print("Girando a la derecha 90 grados...")
         # Velocidad angular positiva para rotar a la derecha
         # Ajusta la velocidad y el tiempo según sea necesario
-        angular_velocity = -30  # Ajusta este valor según la respuesta de tu robot
-        rotation_duration = 0.6  # Ajusta este valor para lograr una rotación de 90 grados
+        angular_velocity = -90  # Ajusta este valor según la respuesta de tu robot
+        rotation_duration = 1.1  # Ajusta este valor para lograr una rotación de 90 grados
         
         self.chassis.set_velocity(0, 0, angular_velocity)  # Iniciar rotación
         time.sleep(rotation_duration)  # Esperar el tiempo necesario para completar la rotación
