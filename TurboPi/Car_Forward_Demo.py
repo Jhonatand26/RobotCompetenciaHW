@@ -39,7 +39,7 @@ signal.signal(signal.SIGINT, Stop)
 
 if __name__ == '__main__':
     while start:
-        chassis.set_velocity(50,90,0) # 控制机器人移动函数,线速度50(0~100)，方向角90(0~360)，偏航角速度0(-2~2) Movement control function. The linear velocity is 50 (0~100). The direcion angle is 180 (0-350). The jaw velocity is 0.3 (-2~2).
+        chassis.set_velocity(80,90,0) # 控制机器人移动函数,线速度50(0~100)，方向角90(0~360)，偏航角速度0(-2~2) Movement control function. The linear velocity is 50 (0~100). The direcion angle is 180 (0-350). The jaw velocity is 0.3 (-2~2).
         time.sleep(1)
         
     chassis.set_velocity(0,0,0)  # 关闭所有电机 Turn off all motors
