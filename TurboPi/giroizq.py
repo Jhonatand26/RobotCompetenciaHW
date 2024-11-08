@@ -1,32 +1,15 @@
+#!/usr/bin/python3
 import time
-from HiwonderSDK.mecanum import MecanumChassis  # Asegúrate de que este módulo esté disponible
+from HiwonderSDK.mecanum import MecanumChassis
 
-class RobotMovement:
-    def __init__(self):
-        self.chassis = MecanumChassis()
+def girar_90_izq_preciso():
+    chassis = MecanumChassis()  # Inicializa el chasis
+    velocidad_rotacion = -40  # Puedes reducir la velocidad para mayor precisión
+    print("Girando 90 grados a la derecha con precisión...")
+    chassis.set_velocity(0, 0, velocidad_rotacion)  # Girar sobre su eje hacia la derecha a una velocidad reducida
+    tiempo_giro = 0.5  # Ajustar este tiempo según pruebas para lograr 90 grados exactos
+    time.sleep(tiempo_giro)
+    chassis.set_velocity(0, 0, 0)  # Detener el movimiento
 
-    def rotate_right_90_degrees(self):
-        """Gira el robot hacia la derecha 90 grados y se detiene."""
-        print("Girando a la derecha 90 grados...")
-        # Velocidad angular positiva para rotar a la derecha
-        # Ajusta la velocidad y el tiempo según sea necesario
-        angular_velocity = -90  # Ajusta este valor según la respuesta de tu robot
-        rotation_duration = 1.1  # Ajusta este valor para lograr una rotación de 90 grados
-        
-        self.chassis.set_velocity(0, 0, angular_velocity)  # Iniciar rotación
-        time.sleep(rotation_duration)  # Esperar el tiempo necesario para completar la rotación
-        self.stop()  # Detener el robot
-        print("Rotación completa. Robot detenido.")
-
-    def stop(self):
-        """Detiene el movimiento del robot."""
-        self.chassis.set_velocity(0, 0, 0)
-        print("Robot detenido.")
-
-if __name__ == '__main__':
-    robot = RobotMovement()
-    try:
-        robot.rotate_right_90_degrees()  # Gira a la derecha 90 grados
-    except KeyboardInterrupt:
-        robot.stop()
-
+if __name__ == "__main__":
+    girar_90_izq_preciso()
