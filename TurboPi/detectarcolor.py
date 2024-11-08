@@ -7,7 +7,7 @@ import time
 def detect_color(frame):
     """
     Detecta colores azul, verde y negro en la imagen proporcionada.
-    Retorna el nombre del color detectado más prominente.
+    Retorna el nombre del color detectado más prominente o "Ninguno".
     """
     # Convertir a espacio de color HSV
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -34,15 +34,21 @@ def detect_color(frame):
 
     # Umbral para determinar si hay un color significativo
     total_pixels = frame.shape[0] * frame.shape[1]
-    min_area_threshold = total_pixels * 0.02  # 2% del área total de la imagen (ajusta según sea necesario)
+    min_area_threshold = total_pixels * 0.01  # Reduce a 1% del área total de la imagen
 
-    # Verificar si alguna de las áreas detectadas es significativa
+    # Verificar si las áreas detectadas son significativas
     if blue_area > min_area_threshold and blue_area > green_area and blue_area > black_area:
         return "Azul"
     elif green_area > min_area_threshold and green_area > blue_area and green_area > black_area:
         return "Verde"
-    elif black_area > min_area_threshold and black_area > blue_area and black_area > green_area:
-        return "Negro"
+    elif black_area > min_area_threshold:
+        # Condición más permisiva para detectar negro
+        black_ratio = black_area / total_pixels
+        # Ajuste del rango de detección del negro
+        if blue_area < min_area_threshold * 0.5 and green_area < min_area_threshold * 0.5:
+            return "Negro"
+        else:
+            return "Ninguno"
     else:
         return "Ninguno"
 
@@ -74,4 +80,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
