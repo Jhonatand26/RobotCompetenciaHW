@@ -32,12 +32,16 @@ def detect_color(frame):
     green_area = cv2.countNonZero(mask_green)
     black_area = cv2.countNonZero(mask_black)
 
-    # Determinar el color más prominente
-    if blue_area > green_area and blue_area > black_area:
+    # Umbral para determinar si hay un color significativo
+    total_pixels = frame.shape[0] * frame.shape[1]
+    min_area_threshold = total_pixels * 0.02  # 2% del área total de la imagen (ajusta según sea necesario)
+
+    # Verificar si alguna de las áreas detectadas es significativa
+    if blue_area > min_area_threshold and blue_area > green_area and blue_area > black_area:
         return "Azul"
-    elif green_area > blue_area and green_area > black_area:
+    elif green_area > min_area_threshold and green_area > blue_area and green_area > black_area:
         return "Verde"
-    elif black_area > blue_area and black_area > green_area:
+    elif black_area > min_area_threshold and black_area > blue_area and black_area > green_area:
         return "Negro"
     else:
         return "Ninguno"
@@ -70,3 +74,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
