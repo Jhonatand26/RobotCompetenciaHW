@@ -5,21 +5,18 @@ class RobotMovement:
     def __init__(self):
         self.chassis = MecanumChassis()
 
-    def rotate_right(self, duration=2):
-        """Gira el robot hacia la derecha sobre su eje."""
-        print("Girando a la derecha...")
-        # Velocidad positiva para rotación hacia la derecha
-        self.chassis.set_velocity(0, 0, 30)  # velocidad angular positiva (ajusta según sea necesario)
-        time.sleep(duration)
-        self.stop()
-
-    def rotate_left(self, duration=2):
-        """Gira el robot hacia la izquierda sobre su eje."""
-        print("Girando a la izquierda...")
-        # Velocidad negativa para rotación hacia la izquierda
-        self.chassis.set_velocity(0, 0, -30)  # velocidad angular negativa (ajusta según sea necesario)
-        time.sleep(duration)
-        self.stop()
+    def rotate_right_90_degrees(self):
+        """Gira el robot hacia la derecha 90 grados y se detiene."""
+        print("Girando a la derecha 90 grados...")
+        # Velocidad angular positiva para rotar a la derecha
+        # Ajusta la velocidad y el tiempo según sea necesario
+        angular_velocity = 30  # Ajusta este valor según la respuesta de tu robot
+        rotation_duration = 1.5  # Ajusta este valor para lograr una rotación de 90 grados
+        
+        self.chassis.set_velocity(0, 0, angular_velocity)  # Iniciar rotación
+        time.sleep(rotation_duration)  # Esperar el tiempo necesario para completar la rotación
+        self.stop()  # Detener el robot
+        print("Rotación completa. Robot detenido.")
 
     def stop(self):
         """Detiene el movimiento del robot."""
@@ -29,9 +26,6 @@ class RobotMovement:
 if __name__ == '__main__':
     robot = RobotMovement()
     try:
-        # Prueba de rotación: gira a la derecha por 2 segundos, luego a la izquierda por 2 segundos
-        robot.rotate_right()
-        time.sleep(1)  # Pausa entre movimientos
-        robot.rotate_left()
+        robot.rotate_right_90_degrees()  # Gira a la derecha 90 grados
     except KeyboardInterrupt:
         robot.stop()
