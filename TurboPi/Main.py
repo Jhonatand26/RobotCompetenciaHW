@@ -11,6 +11,7 @@ class LaberintoRobot:
         self.umbral_max = 350  # Umbral máximo en mm (35 cm)
         self.umbral_min = 170  # Umbral mínimo en mm (17 cm)
         self.umbral_bifurcacion = 86  # Umbral en mm para detectar una bifurcación
+        self.running = True  # Variable de control para ejecutar o detener el programa
 
     def rotar_y_medir(self, grados):
         """
@@ -119,25 +120,47 @@ class LaberintoRobot:
 
             time.sleep(0.1)  # Pausa breve para permitir medición y ajuste
 
+    def detener(self):
+            """
+            Detiene el robot y el bucle principal.
+            """
+            self.running = False
+            self.chassis.set_velocity(0, 0, 0)
+            print("Robot detenido.")
+
 if __name__ == "__main__":
     # Limpia cualquier configuración previa
     GPIO.cleanup()
-    # Configuración del botón
-    GPIO.setmode(GPIO.BCM)
-    boton_pin = 13
-    GPIO.setup(boton_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-    print("Esperando presionar el botón para iniciar...")
+    # Configuración del modo de numeración de pines
+    GPIO.setmode(GPIO.BCM)
+
+    # Configuración del botón de inicio (en el pin 13)
+    boton_inicio_pin = 13
+    GPIO.setup(boton_inicio_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    # Configuración del botón de parada (en el pin 23)
+    boton_parada_pin = 23
+    GPIO.setup(boton_parada_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    # Inicializa el robot
+    robot = LaberintoRobot()
+
+    # Configuración de la interrupción para el botón de parada
+    def detener_robot(channel):
+        robot.detener()
+
+    GPIO.add_event_detect(boton_parada_pin, GPIO.FALLING, callback=detener_robot, bouncetime=300)
+
+    print("Esperando presionar el botón de inicio para iniciar...")
     try:
-        # Esperar hasta que el botón sea presionado
-        while GPIO.input(boton_pin) == GPIO.HIGH:
+        # Esperar hasta que el botón de inicio sea presionado
+        while GPIO.input(boton_inicio_pin) == GPIO.HIGH:
             time.sleep(0.1)
 
-        print("Botón presionado. Iniciando...")
-        robot = LaberintoRobot()
+        print("Botón de inicio presionado. Iniciando...")
         robot.ejecutar()
     except KeyboardInterrupt:
-        robot.chassis.set_velocity(0, 0, 0)
-        print("Robot detenido.")
+        robot.detener()
     finally:
         GPIO.cleanup()
